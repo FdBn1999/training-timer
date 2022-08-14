@@ -1,0 +1,24 @@
+.centered {
+    display: inline;
+    text-align: center;
+}
+  
+.numbers {
+    font-size: 20rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.time-buttons {
+    display: inline;
+    text-align: center;
+}
+
+.icons {
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+.step {
+    font-size: 4rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

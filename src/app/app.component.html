@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="row">
+    <div class="col" style="margin-top: 2rem; text-align: right; margin-right: 0rem;">
+      <i class="bi bi-gear-fill icons" style="font-size: 3rem;" (click)="openSettingsModal(content)"></i>
+    </div>
+  </div>
+  <div class="row time-buttons">
+    <div class="col" style="margin-top: 6rem;">
+      <i *ngIf="!isStopped" class="bi bi-pause-fill icons" style="margin-right: 1rem;" (click)="stopTimer()"></i>
+      <i *ngIf="isStopped"class="bi bi-play-fill icons" style="margin-right: 1rem;" (click)="runTimer()" (disabled)="disablePlayBtn()"></i>
+      <i class="bi bi-arrow-clockwise icons" style="margin-left: 1rem;" (click)="restartChronometer()"></i>
+    </div>
+  </div>
+  <div class="row centered">
+    <div class="col" style="margin-top: 13rem;">
+      <span id="seconds" class="numbers">
+        {{ seconds }}
+      </span>
+    </div>
+  </div>
+  <div class="row centered">
+    <div class="col" style="margin-top: 7rem;">
+      <span id="step" class="step">
+        {{ getStepLabel() }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" style="font-weight: bold;" id="modal-basic-title">Update train information</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeSettingsModal(modal)"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+        <div class="mb-3">
+          <label for="secondsPerExercise">Seconds per exercise</label>
+        <div class="input-group">
+          <input [(ngModel)]="settings.secondsPerExercise" name="secondsPerExercise" id="secondsPerExercise" class="form-control" placeholder="1" type="number" min="1">
+        </div>
+
+        <label for="breakSeconds" style="margin-top: 1rem;">Break seconds</label>
+        <div class="input-group">
+          <input [(ngModel)]="settings.breakSeconds" name="breakSeconds" id="breakSeconds" class="form-control" placeholder="1" type="number" min="1">
+        </div>
+
+        <label for="sets" style="margin-top: 1rem;">Sets</label>
+        <div class="input-group">
+          <input [(ngModel)]="settings.setsNumber" name="sets" id="sets" class="form-control" placeholder="1" type="number" min="1">
+        </div>
+
+        <label for="sets" style="margin-top: 1rem;">Exercises</label>
+        <div class="input-group">
+          <input [(ngModel)]="settings.exercisesNumber" 
+            name="exercises" 
+            id="exercises" 
+            class="form-control" 
+            placeholder="1" 
+            type="number" 
+            min="1"
+            (ngModelChange)="initializeExercisesList()">
+        </div>
+        
+        <div style="margin-top: 1rem;">
+          <div *ngFor="let i of [].constructor(settings.exercisesNumber); let n=index">
+            <label for="exercise" style="margin-top: 1rem;">
+              Exercise {{n + 1}}
+            </label>
+            <input type="text" name="exercise + {{n}}" class="form-control" [(ngModel)]="settings.exercises[n]">
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="closeAndSaveSettingsModal(modal)">Save</button>
+  </div>
+</ng-template>
