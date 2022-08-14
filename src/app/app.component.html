@@ -1,14 +1,41 @@
 <div class="container">
   <div class="row">
     <div class="col" style="margin-top: 2rem; text-align: right; margin-right: 0rem;">
-      <i class="bi bi-gear-fill icons" style="font-size: 3rem;" (click)="openSettingsModal(content)"></i>
+      <i 
+        class="bi bi-gear-fill icons"
+        style="font-size: 3rem;" 
+        (click)="openSettingsModal(content)"
+        data-toggle="tooltip" 
+        title="Training settings">
+      </i>
     </div>
   </div>
   <div class="row time-buttons">
     <div class="col" style="margin-top: 6rem;">
-      <i *ngIf="!isStopped" class="bi bi-pause-fill icons" style="margin-right: 1rem;" (click)="stopTimer()"></i>
-      <i *ngIf="isStopped"class="bi bi-play-fill icons" style="margin-right: 1rem;" (click)="runTimer()" (disabled)="disablePlayBtn()"></i>
-      <i class="bi bi-arrow-clockwise icons" style="margin-left: 1rem;" (click)="restartChronometer()"></i>
+      <i 
+        *ngIf="!isStopped" 
+        class="bi bi-pause-fill icons" 
+        style="margin-right: 1rem;" 
+        (click)="stopTimer()" 
+        data-toggle="tooltip" 
+        title="[Space] - Pause timer">
+      </i>
+      <i 
+        *ngIf="isStopped" 
+        class="bi bi-play-fill icons" 
+        style="margin-right: 1rem;" 
+        (click)="runTimer()" 
+        (disabled)="disablePlayBtn()"
+        data-toggle="tooltip" 
+        title="[Space] - Run timer">
+      </i>
+      <i 
+        class="bi bi-arrow-clockwise icons" 
+        style="margin-left: 1rem;" 
+        (click)="restartChronometer()"
+        data-toggle="tooltip" 
+        title="[R] - Restart timer">
+      </i>
     </div>
   </div>
   <div class="row centered">
@@ -22,6 +49,13 @@
     <div class="col" style="margin-top: 7rem;">
       <span id="step" class="step">
         {{ getStepLabel() }}
+      </span>
+    </div>
+  </div>
+  <div class="row centered">
+    <div class="col" style="margin-top: 1rem;">
+      <span *ngIf="shouldShowNextExerciseLabel()" id="nextExercise" class="next-exercise">
+        {{ getNextExerciseLabel() }}
       </span>
     </div>
   </div>
@@ -75,6 +109,7 @@
     </form>
   </div>
   <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="clearSettings()">Clear settings</button>
     <button type="button" class="btn btn-outline-dark" (click)="closeAndSaveSettingsModal(modal)">Save</button>
   </div>
 </ng-template>

@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   public seconds: number;
   public isStopped: boolean;
   public settings: ITrainingSettings;
+  public finishedSets: number;
 
   private source = timer(0, 1000);
   private timerSubscription: Subscription;
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSettings();
+    this.getFinishedSets();
   }
 
   private initialize(): void {
@@ -47,6 +49,7 @@ export class AppComponent implements OnInit {
     this.step = Step.Train;
     this.currentSet = 1;
     this.currentExerciseNumber = 0;
+    this.finishedSets = 0;
   }
 
   private showDate(): void{
@@ -62,6 +65,12 @@ export class AppComponent implements OnInit {
       if (this.currentExerciseNumber === this.settings.exercisesNumber) {
         this.currentExerciseNumber = 0;
         this.currentSet++;
+
+        if (this.currentSet > this.settings.setsNumber) {
+          this.stopTimer();
+          this.restartChronometer();
+          this.increaseFinishedSets();
+        }
       }
     }
   }
@@ -153,6 +162,35 @@ export class AppComponent implements OnInit {
       if (settings) {
         this.settings = settings;
       }
+    });
+  }
+
+  public async clearSettings(): Promise<void> {
+    this.initialize();
+    await this.localforageService.remove(AppConsts.SettingsLocalStorageKey);
+  }
+
+  public shouldShowNextExerciseLabel(): boolean {
+    return this.step === Step.Break &&
+      (this.currentExerciseNumber !== this.settings.exercisesNumber ||
+      this.currentSet < this.settings.setsNumber);
+  }
+
+  public getNextExerciseLabel(): string {
+    if (this.settings.exercises[this.currentExerciseNumber + 1]) {
+      return `Next: ${this.settings.exercises[this.currentExerciseNumber + 1]}`;
+    }
+    return 'Finish :)';
+  }
+
+  public async increaseFinishedSets(): Promise<void> {
+    this.finishedSets++;
+    this.localforageService.set(AppConsts.FinishedSetsLocalStorageKey, this.finishedSets);
+  }
+
+  public getFinishedSets(): void {
+    this.localforageService.get(AppConsts.FinishedSetsLocalStorageKey).then((finishedSets: any) => {
+      this.finishedSets = finishedSets;
     });
   }
 }
